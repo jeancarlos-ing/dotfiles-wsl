@@ -1,0 +1,11 @@
+# ignore everything
+/*
+!.gitignore
+
+# except for the files and folders we want to track
+!README.md
+!.bashrc
+!.zshrc
+!.config
+!.local/bin
+!.vimrc
