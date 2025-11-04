@@ -15,8 +15,6 @@ bind -m vi-insert 'Control-l: clear-screen'
 [[ $- != *i* ]] && return
 
 
-# prompt
-PS1="\[\e[32m\]\u@\h:\[\e[34m\]\w\[\e[31m\]\$(__git_ps1)\[\e[0m\]\$ "
 
 # path
 if [ -d "$HOME/.bin" ] ;
@@ -126,3 +124,6 @@ alias newtag='git tag -a'
 
 # termbin
 alias tb="nc termbin.com 9999"
+
+# starship
+eval $(starship init bash)
