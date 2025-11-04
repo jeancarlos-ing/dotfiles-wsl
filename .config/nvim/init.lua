@@ -1,6 +1,23 @@
--------------------
--- EDITOR SETTINGS
--------------------
+-- Copyright 2025 Jean Carlos
+
+-- Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”),
+-- to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+-- and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+-- The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+-- THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+-- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+-- WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+--- Neovim personal config
+-- JC -> Jean Carlos
+-- jeancarlos.ingenieria@gmail.com
+
+--------------------
+--- EDITOR SETNGS
+--------------------
 
 vim.o.number = true
 vim.o.ignorecase = true
@@ -12,32 +29,21 @@ vim.o.tabstop = 2
 vim.o.shiftwidth = 2
 vim.o.expandtab = false
 
----------------
--- KEYBINDINGS
----------------
+---------------------
+--- KEYMAPS
+---------------------
 
--- Space as leader key
 vim.g.mapleader = ' '
-
--- Shortcuts
 vim.keymap.set({'n', 'x', 'o'}, '<leader>h', '^')
 vim.keymap.set({'n', 'x', 'o'}, '<leader>l', 'g_')
 vim.keymap.set('n', '<leader>a', ':keepjumps normal! ggVG<cr>')
-
--- Basic clipboard interaction
 vim.keymap.set({'n', 'x'}, 'gy', '"+y') -- copy
 vim.keymap.set({'n', 'x'}, 'gp', '"+p') -- paste
-
--- Delete text
 vim.keymap.set({'n', 'x'}, 'x', '"_x')
 vim.keymap.set({'n', 'x'}, 'X', '"_d')
-
--- Commands
 vim.keymap.set('n', '<leader>w', '<cmd>write<cr>')
 vim.keymap.set('n', '<leader>bq', '<cmd>bdelete<cr>')
 vim.keymap.set('n', '<leader>bl', '<cmd>buffer #<cr>')
-
--- Todo.txt
 vim.keymap.set("n", "<leader>tn", "<cmd>TodoTxt new<cr>", { desc = "New todo entry" })
 vim.keymap.set("n", "<leader>tt", "<cmd>TodoTxt<cr>", { desc = "Toggle todo.txt" })
 vim.keymap.set("n", "<leader>td", "<cmd>DoneTxt<cr>", { desc = "Toggle done.txt" })
@@ -51,9 +57,9 @@ vim.keymap.set("n", "<leader>tsc", "<Plug>(TodoTxtSortByContext)", { desc = "Sor
 vim.keymap.set("n", "<leader>tsP", "<Plug>(TodoTxtSortByProject)", { desc = "Sort by project" })
 vim.keymap.set("n", "<leader>tsd", "<Plug>(TodoTxtSortByDueDate)", { desc = "Sort by due date" })
 
-------------
+--------------
 -- COMMANDS
-------------
+--------------
 
 vim.api.nvim_create_user_command(
 	'ReloadConfig', 'source $MYVIMRC', {})
@@ -75,9 +81,7 @@ vim.api.nvim_create_autocmd('FileType', {
   command = 'nnoremap <buffer> q <cmd>quit<cr>'
 })
 
------------
--- PLUGINS
------------
+-- PLUGINS MANAGER
 
 local mini = {}
 
@@ -122,6 +126,8 @@ MiniDeps.setup({
   },
 })
 
+--- PLUGINS
+
 -- See :help MiniDeps.add
 MiniDeps.add({
   source = 'nvim-mini/mini.nvim',
@@ -129,7 +135,7 @@ MiniDeps.add({
 })
 
 
-MiniDeps.add('folke/tokyonight.nvim')
+MiniDeps.add('ellisonleao/gruvbox.nvim')
 
 -- TODO.TXT
 MiniDeps.now(function()
@@ -159,14 +165,14 @@ end)
   },
 })
 
--- Treesiter
--- Add to current session (install if absent)
+-- Lspconfig
 MiniDeps.add({
   source = 'neovim/nvim-lspconfig',
   -- Supply dependencies near target plugin
   depends = { 'williamboman/mason.nvim' },
 })
 
+-- Treesitter
 MiniDeps.add({
   source = 'nvim-treesitter/nvim-treesitter',
   -- Use 'master' while monitoring updates in 'main'
@@ -175,17 +181,12 @@ MiniDeps.add({
   -- Perform action after every checkout
   hooks = { post_checkout = function() vim.cmd('TSUpdate') end },
 })
--- Possible to immediately execute code which depends on the added plugin
 
 require'nvim-treesitter.configs'.setup {
   ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "todotxt" },
-
   sync_install = false,
-
  auto_install = true,
-
   ignore_install = {  },
-
   highlight = {
     enable = true,
    disable = {  },
@@ -196,7 +197,6 @@ require'nvim-treesitter.configs'.setup {
             return true
         end
     end,
-
     additional_vim_regex_highlighting = false,
   },
 }
@@ -207,26 +207,40 @@ require'nvim-treesitter.configs'.setup {
 --------------------------
 
 -- Editor theme
--- See :help tokyonight.nvim-tokyo-night-configuration
-require('tokyonight').setup({
-  styles = {
-    comments = {italic = true},
-    keywords = {italic = true},
-  },
-})
+vim.o.background = "dark"
+vim.cmd([[colorscheme gruvbox]])
+require("gruvbox").setup({
+  terminal_colors = true,
+  undercurl = true,
+  underline = true,
+  bold = true,
+  italic = {
+  	strings = true,
+    emphasis = true,
+   	comments = true,
+   	operators = false,
+   	folds = true
+	},
+  strikethrough = true,
+  invert_selection = false,
+  invert_signs = false,
+  invert_tabline = false,
+  inverse = true,
+  contrast = "hard",
+	transparent_mode = true
+ })
 
-vim.o.termguicolors = true
-vim.cmd.colorscheme('tokyonight')
-
--- See :help MiniIcons.config
--- Change style to 'ascii' if you don't have a font with fancy icons
+-- Icons
 require('mini.icons').setup({style = 'glyph'})
 
--- See :help MiniStatusline.config
+-- Statusline
 vim.o.showmode = true
 require('mini.statusline').setup({use_icons = true})
 
--- Others plugins revised:
+
+-------------------------
+--- PLUGINS REVISED
+-------------------------
 
 require('mini.align').setup()
 require('mini.comment').setup()
@@ -263,5 +277,4 @@ require('mini.trailspace').setup()
 require('mini.doc').setup()
 require('mini.fuzzy').setup()
 require('mini.test').setup()
-
 
