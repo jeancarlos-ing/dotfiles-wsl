@@ -1,280 +1,189 @@
--- Copyright 2025 Jean Carlos
+-- MIT License
 
--- Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”),
--- to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
--- and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+-- Copyright (c) 2025 Jean Carlos
+-- Permission is hereby granted, free of charge, to any person obtaining a copy
+-- of this software and associated documentation files (the "Software"), to deal
+-- in the Software without restriction, including without limitation the rights
+-- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+-- copies of the Software, and to permit persons to whom the Software is
+-- furnished to do so, subject to the following conditions:
+-- The above copyright notice and this permission notice shall be included in
+-- all copies or substantial portions of the Software.
+-- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
 
--- The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+-------------------------
+-- EDITOR SETTINGS
+-------------------------
 
--- THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
--- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
--- WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+vim.o.number = true         -- Show line numbers
+vim.o.ignorecase = true     -- Case-insensitive search
+vim.o.smartcase = true      -- Uppercase overrides ignorecase
+vim.o.hlsearch = false      -- Disable search highlight
+vim.o.wrap = true           -- Wrap long lines
+vim.o.breakindent = true    -- Indent wrapped lines
+vim.o.tabstop = 2           -- Tab width
+vim.o.shiftwidth = 2        -- Indent width
+vim.o.expandtab = false     -- Use tabs
+vim.o.termguicolors = true  -- Enable true colors
 
-
---- Neovim personal config
--- JC -> Jean Carlos
--- jeancarlos.ingenieria@gmail.com
-
---------------------
---- EDITOR SETNGS
---------------------
-
-vim.o.number = true
-vim.o.ignorecase = true
-vim.o.smartcase = true
-vim.o.hlsearch = false
-vim.o.wrap = true
-vim.o.breakindent = true
-vim.o.tabstop = 2
-vim.o.shiftwidth = 2
-vim.o.expandtab = false
-
----------------------
---- KEYMAPS
----------------------
+-------------------------
+-- KEYMAPS
+-------------------------
 
 vim.g.mapleader = ' '
-vim.keymap.set({'n', 'x', 'o'}, '<leader>h', '^')
-vim.keymap.set({'n', 'x', 'o'}, '<leader>l', 'g_')
-vim.keymap.set('n', '<leader>a', ':keepjumps normal! ggVG<cr>')
-vim.keymap.set({'n', 'x'}, 'gy', '"+y') -- copy
-vim.keymap.set({'n', 'x'}, 'gp', '"+p') -- paste
-vim.keymap.set({'n', 'x'}, 'x', '"_x')
-vim.keymap.set({'n', 'x'}, 'X', '"_d')
-vim.keymap.set('n', '<leader>w', '<cmd>write<cr>')
-vim.keymap.set('n', '<leader>bq', '<cmd>bdelete<cr>')
-vim.keymap.set('n', '<leader>bl', '<cmd>buffer #<cr>')
-vim.keymap.set("n", "<leader>tn", "<cmd>TodoTxt new<cr>", { desc = "New todo entry" })
-vim.keymap.set("n", "<leader>tt", "<cmd>TodoTxt<cr>", { desc = "Toggle todo.txt" })
-vim.keymap.set("n", "<leader>td", "<cmd>DoneTxt<cr>", { desc = "Toggle done.txt" })
-vim.keymap.set("n", "<leader>tg", "<cmd>TodoTxt ghost<cr>", { desc = "Toggle ghost text" })
-vim.keymap.set("n", "<cr>", "<Plug>(TodoTxtToggleState)", { desc = "Toggle task state" })
-vim.keymap.set("n", "<c-c>n", "<Plug>(TodoTxtCyclePriority)", { desc = "Cycle priority" })
-vim.keymap.set("n", "<leader>tm", "<Plug>(TodoTxtMoveDone)", { desc = "Move done tasks" })
-vim.keymap.set("n", "<leader>tss", "<Plug>(TodoTxtSortTasks)", { desc = "Sort tasks (default)" })
-vim.keymap.set("n", "<leader>tsp", "<Plug>(TodoTxtSortByPriority)", { desc = "Sort by priority" })
-vim.keymap.set("n", "<leader>tsc", "<Plug>(TodoTxtSortByContext)", { desc = "Sort by context" })
-vim.keymap.set("n", "<leader>tsP", "<Plug>(TodoTxtSortByProject)", { desc = "Sort by project" })
-vim.keymap.set("n", "<leader>tsd", "<Plug>(TodoTxtSortByDueDate)", { desc = "Sort by due date" })
 
---------------
--- COMMANDS
---------------
+-- Navigation
+vim.keymap.set({'n','x','o'}, '<leader>h','^')
+vim.keymap.set({'n','x','o'}, '<leader>l','g_')
+vim.keymap.set('n','<leader>a',':keepjumps normal! ggVG<cr>')
 
-vim.api.nvim_create_user_command(
-	'ReloadConfig', 'source $MYVIMRC', {})
+-- Clipboard
+vim.keymap.set({'n','x'}, 'gy','"+y')
+vim.keymap.set({'n','x'}, 'gp','"+p')
 
-local group = vim.api.nvim_create_augroup(
-	'user_cmds', {clear = true})
+-- Delete without affecting register
+vim.keymap.set({'n','x'}, 'x','"_x')
+vim.keymap.set({'n','x'}, 'X','"_d')
 
-vim.api.nvim_create_autocmd('TextYankPost', {
-  desc = 'Highlight on yank',
-  group = group,
-  callback = function()
-    vim.highlight.on_yank({higroup = 'Visual', timeout = 200})
-  end,
+-- Files & buffers
+vim.keymap.set('n','<leader>w','<cmd>write<cr>')
+vim.keymap.set('n','<leader>bq','<cmd>bdelete<cr>')
+vim.keymap.set('n','<leader>bl','<cmd>buffer #<cr>')
+
+-- TODO.txt
+vim.keymap.set("n","<leader>tn","<cmd>TodoTxt new<cr>")
+vim.keymap.set("n","<leader>tt","<cmd>TodoTxt<cr>")
+vim.keymap.set("n","<leader>td","<cmd>DoneTxt<cr>")
+vim.keymap.set("n","<leader>tg","<cmd>TodoTxt ghost<cr>")
+vim.keymap.set("n","<cr>","<Plug>(TodoTxtToggleState)")
+vim.keymap.set("n","<c-c>n","<Plug>(TodoTxtCyclePriority)")
+vim.keymap.set("n","<leader>tm","<Plug>(TodoTxtMoveDone)")
+vim.keymap.set("n","<leader>tss","<Plug>(TodoTxtSortTasks)")
+vim.keymap.set("n","<leader>tsp","<Plug>(TodoTxtSortByPriority)")
+vim.keymap.set("n","<leader>tsc","<Plug>(TodoTxtSortByContext)")
+vim.keymap.set("n","<leader>tsP","<Plug>(TodoTxtSortByProject)")
+vim.keymap.set("n","<leader>tsd","<Plug>(TodoTxtSortByDueDate)")
+
+-------------------------
+-- COMMANDS & AUTOCMDS
+-------------------------
+
+vim.api.nvim_create_user_command('ReloadConfig','source $MYVIMRC',{})  -- Reload config
+
+local group = vim.api.nvim_create_augroup('user_cmds',{clear=true})
+
+-- Highlight on yank
+vim.api.nvim_create_autocmd('TextYankPost',{
+  group=group,
+  callback=function() vim.highlight.on_yank({higroup='Visual',timeout=200}) end,
 })
 
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = {'help', 'man'},
-  group = group,
-  command = 'nnoremap <buffer> q <cmd>quit<cr>'
+-- Quick quit for help/man
+vim.api.nvim_create_autocmd('FileType',{
+  pattern={'help','man'},
+  group=group,
+  command='nnoremap <buffer> q <cmd>quit<cr>'
 })
 
--- PLUGINS MANAGER
+-------------------------
+-- MINI.DEPS BOOTSTRAP
+-------------------------
 
-local mini = {}
-
-mini.branch = 'main'
-mini.packpath = vim.fn.stdpath('data') .. '/site'
-
-function mini.require_deps()
-  local uv = vim.uv or vim.loop
-  local mini_path = mini.packpath .. '/pack/deps/start/mini.nvim'
-
-  if not uv.fs_stat(mini_path) then
-    print('Installing mini.nvim....')
-    vim.fn.system({
-      'git',
-      'clone',
-      '--filter=blob:none',
-      'https://github.com/nvim-mini/mini.nvim',
-      string.format('--branch=%s', mini.branch),
-      mini_path
-    })
-
+local MiniDeps=(function()
+  local packpath=vim.fn.stdpath('data')..'/site'
+  local mini_path=packpath..'/pack/deps/start/mini.nvim'
+  if not vim.loop.fs_stat(mini_path) then
+    print('Installing mini.nvim...')
+    vim.fn.system({'git','clone','--filter=blob:none','https://github.com/nvim-mini/mini.nvim','--branch=main',mini_path})
     vim.cmd('packadd mini.nvim | helptags ALL')
   end
-
-  local ok, deps = pcall(require, 'mini.deps')
-  if not ok then
-    return {}
-  end
-
+  local ok,deps=pcall(require,'mini.deps')
+  if not ok then return {} end
   return deps
-end
+end)()
 
-local MiniDeps = mini.require_deps()
-if not MiniDeps.setup then
-  return
-end
+if MiniDeps.setup then MiniDeps.setup({path={package=vim.fn.stdpath('data')..'/site'}}) end
 
--- See :help MiniDeps.config
-MiniDeps.setup({
-  path = {
-    package = mini.packpath,
-  },
-})
+-------------------------
+-- PLUGINS
+-------------------------
 
---- PLUGINS
+MiniDeps.add({source='nvim-mini/mini.nvim',checkout='main'})
+MiniDeps.add({source='ellisonleao/gruvbox.nvim'})
+MiniDeps.add({source='phrmendes/todotxt.nvim'})
+MiniDeps.add({source='neovim/nvim-lspconfig',depends={'williamboman/mason.nvim'}})
+MiniDeps.add({source='williamboman/mason.nvim'})
+MiniDeps.add({source='williamboman/mason-lspconfig.nvim'})
+MiniDeps.add({source='nvim-treesitter/nvim-treesitter',checkout='master',hooks={post_checkout=function() vim.cmd('TSUpdate') end}})
 
--- See :help MiniDeps.add
-MiniDeps.add({
-  source = 'nvim-mini/mini.nvim',
-  checkout = mini.branch
-})
+-------------------------
+-- MINI.NVIM CONFIG
+-------------------------
 
-
-MiniDeps.add('ellisonleao/gruvbox.nvim')
-
--- TODO.TXT
 MiniDeps.now(function()
-  MiniDeps.add({ source = "phrmendes/todotxt.nvim" })
-  require("todotxt").setup({
-    todotxt = vim.env.HOME .. "/notes/todo.txt",
-    donetxt = vim.env.HOME .. "/notes/done.txt",
-    ghost_text = {
-    enable = true,
-    mappings = {
-     ["(A)"] = "now",      -- High priority tasks
-     ["(B)"] = "next",     -- Medium priority tasks
-     ["(C)"] = "today",    -- Lower priority tasks
-     ["(D)"] = "tomorrow", -- Even lower priority
-     ["(E)"] = "this week",
-     ["(F)"] = "next week",
-  }},
-  prefix = " ",           -- Text prefix
-  highlight = "Comment"  -- Highlight group
-})
+  -- Core plugins
+  local mini={ 'align','comment','completion','keymap','move','pairs','operators','snippets','splitjoin','surround','basics','bracketed','bufremove','clue','diff','extra','files','git','jump','jump2d','misc','pick','sessions','visits','animate','colors','cursorword','hipatterns','indentscope','notify','tabline','trailspace','doc','fuzzy','test'}
+
+  for _,p in ipairs(mini) do require('mini.'..p).setup() end
+  -- TODO.txt
+
+  require('todotxt').setup({
+    todotxt=vim.env.HOME..'/notes/todo.txt',
+    donetxt=vim.env.HOME..'/notes/done.txt',
+    ghost_text={enable=true},
+    prefix=' ',
+    highlight='Comment',
+  })
 end)
 
- vim.filetype.add({
-  filename = {
-    ["todo.txt"] = "todotxt",
-    ["done.txt"] = "todotxt",
-  },
+vim.filetype.add({filename={['todo.txt']='todotxt',['done.txt']='todotxt'}})
+
+-------------------------
+-- THEME
+-------------------------
+
+vim.o.background='dark'
+
+vim.cmd([[colorscheme gruvbox]])
+require('gruvbox').setup({
+  terminal_colors=true,
+  undercurl=true,
+  underline=true,
+  bold=true,
+  italic={strings=true,emphasis=true,comments=true,operators=false,folds=true},
+  strikethrough=true,
+  invert_selection=false,
+  invert_signs=false,
+  invert_tabline=false,
+  inverse=true,
+  contrast='hard',
+  transparent_mode=true
 })
 
--- Lspconfig
-MiniDeps.add({
-  source = 'neovim/nvim-lspconfig',
-  -- Supply dependencies near target plugin
-  depends = { 'williamboman/mason.nvim' },
-})
+-------------------------
+-- TREESITTER
+-------------------------
 
--- Treesitter
-MiniDeps.add({
-  source = 'nvim-treesitter/nvim-treesitter',
-  -- Use 'master' while monitoring updates in 'main'
-  checkout = 'master',
-  monitor = 'main',
-  -- Perform action after every checkout
-  hooks = { post_checkout = function() vim.cmd('TSUpdate') end },
-})
-
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "todotxt" },
-  sync_install = false,
- auto_install = true,
-  ignore_install = {  },
-  highlight = {
-    enable = true,
-   disable = {  },
-    disable = function(lang, buf)
-        local max_filesize = 100 * 1024 -- 100 KB
-        local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-        if ok and stats and stats.size > max_filesize then
-            return true
-        end
+require'nvim-treesitter.configs'.setup{
+  ensure_installed={'javascript','typescript','json','html','css','c','lua','vim','vimdoc','query','markdown','markdown_inline','todotxt'},
+  sync_install=false,
+  auto_install=true,
+  highlight={
+    enable=true,
+    disable=function(_,buf)
+      local ok,stats=pcall(vim.loop.fs_stat,vim.api.nvim_buf_get_name(buf))
+      return ok and stats and stats.size>100*1024
     end,
-    additional_vim_regex_highlighting = false,
+    additional_vim_regex_highlighting=false,
   },
 }
 
-
---------------------------
--- PLUGINS CONFIGURATIONS
---------------------------
-
--- Editor theme
-vim.o.background = "dark"
-vim.cmd([[colorscheme gruvbox]])
-require("gruvbox").setup({
-  terminal_colors = true,
-  undercurl = true,
-  underline = true,
-  bold = true,
-  italic = {
-  	strings = true,
-    emphasis = true,
-   	comments = true,
-   	operators = false,
-   	folds = true
-	},
-  strikethrough = true,
-  invert_selection = false,
-  invert_signs = false,
-  invert_tabline = false,
-  inverse = true,
-  contrast = "hard",
-	transparent_mode = true
- })
-
--- Icons
-require('mini.icons').setup({style = 'glyph'})
-
--- Statusline
-vim.o.showmode = true
-require('mini.statusline').setup({use_icons = true})
-
-
 -------------------------
---- PLUGINS REVISED
+-- MASON + LSP
 -------------------------
+---
+require('mason').setup()                          -- Mason installer
+require('mason-lspconfig').setup({ensure_installed={'tsserver'}}) -- Ensure TS/JS LSP
+require('lspconfig').tsserver.setup({})           -- LSP setup
 
-require('mini.align').setup()
-require('mini.comment').setup()
-require('mini.completion').setup()
-require('mini.keymap').setup()
-require('mini.move').setup()
-require('mini.pairs').setup()
-require('mini.operators').setup()
-require('mini.snippets').setup()
-require('mini.splitjoin').setup()
-require('mini.surround').setup()
-require('mini.basics').setup()
-require('mini.bracketed').setup()
-require('mini.bufremove').setup()
-require('mini.clue').setup()
-require('mini.diff').setup()
-require('mini.extra').setup()
-require('mini.files').setup()
-require('mini.git').setup()
-require('mini.jump').setup()
-require('mini.jump2d').setup()
-require('mini.misc').setup()
-require('mini.pick').setup()
-require('mini.sessions').setup()
-require('mini.visits').setup()
-require('mini.animate').setup()
-require('mini.colors').setup()
-require('mini.cursorword').setup()
-require('mini.hipatterns').setup()
-require('mini.indentscope').setup()
-require('mini.notify').setup()
-require('mini.tabline').setup()
-require('mini.trailspace').setup()
-require('mini.doc').setup()
-require('mini.fuzzy').setup()
-require('mini.test').setup()
 
