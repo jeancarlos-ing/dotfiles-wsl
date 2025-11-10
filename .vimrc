@@ -1,4 +1,4 @@
-scriptencoding utf-8
+:w:wptencoding utf-8
 
 filetype plugin indent on
 syntax enable
@@ -47,27 +47,3 @@ set synmaxcol=500
 set incsearch
 set wildmenu
 set cursorcolumn
-
-call plug#begin('~/.vim/plugged')
-  Plug 'gmarik/Vundle.vim'
-  Plug 'itchyny/lightline.vim'
-  Plug 'morhetz/gruvbox'
-  Plug 'shinchu/lightline-gruvbox.vim'
-  Plug 'suan/vim-instant-markdown', {'rtp': 'after'}
-  Plug 'frazrepo/vim-rainbow'
-  Plug 'scrooloose/nerdtree'                         "
-  Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-  Plug 'ryanoasis/vim-devicons'
-  Plug 'vimwiki/vimwiki'
-  Plug 'jreybert/vimagit'
-  Plug 'tpope/vim-surround'
-  Plug 'junegunn/goyo.vim'
-  Plug 'junegunn/limelight.vim'
-  Plug  'junegunn/vim-emoji'
-call plug#end()
-
-colorscheme gruvbox
-set background=dark
-let g:lightline = {}
-let g:lightline.colorscheme = 'gruvbox'
-let g:gruvbox_contrast_dark='hard'
